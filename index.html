@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nanra // portfolio & terminal notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #1e1e2e;
+            --panel-color: #181825;
+            --text-color: #cdd6f4;
+            --text-muted: #6c7086;
+            --accent-color: #89b4fa;
+            --tag-bg: #313244;
+            --border-color: #313244;
+            --hover-color: #2b2b40;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            border: 1px solid var(--border-color);
+            background-color: var(--panel-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(0,0,0,0.1);
+        }
+
+        .header-menu span, .theme-options span {
+            margin-right: 15px;
+            color: var(--text-muted);
+        }
+
+        .header-menu .active {
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        .filter-bar {
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 13px;
+            background: rgba(0,0,0,0.05);
+        }
+
+        .filter-bar button {
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 13px;
+            margin-right: 15px;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0;
+        }
+
+        .filter-bar button.active-filter, .filter-bar button:hover {
+            color: var(--accent-color);
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            min-height: 500px;
+        }
+
+        .sidebar {
+            border-right: 1px solid var(--border-color);
+            padding: 15px;
+        }
+
+        .compose-btn {
+            display: block;
+            background: var(--tag-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            text-align: left;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        .compose-btn:hover {
+            background: var(--hover-color);
+            color: var(--accent-color);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            padding: 6px 0;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .sidebar-menu li:hover {
+            color: var(--text-color);
+        }
+
+        .content-area {
+            padding: 20px;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-size: 12px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .note-card {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: background 0.2s;
+        }
+
+        .note-card:hover {
+            background-color: var(--hover-color);
+        }
+
+        .note-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .note-snippet {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .note-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tag {
+            background-color: #a6e3a1;
+            color: #11111b;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .date-read {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Form Compose Styling */
+        #compose-form {
+            display: none;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        #compose-form h3 {
+            margin-top: 0;
+            color: var(--accent-color);
+            font-size: 14px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px;
+            font-family: inherit;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 13px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 90px;
+        }
+
+        .btn-submit {
+            background: var(--accent-color);
+            color: #11111b;
+            border: none;
+            padding: 8px 15px;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="top-header">
+            <div class="header-menu">
+                <span>Theme:</span>
+                <span class="active">Catppuccin</span>
+            </div>
+            <div class="theme-options">
+                <span>session: catppuccin / alt</span>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <span style="color: var(--text-muted); margin-right: 10px;">Filter:</span>
+            <button class="active-filter" onclick="filterNotes('all')">All Notes</button>
+            <button onclick="filterNotes('ASJ')">ASJ</button>
+            <button onclick="filterNotes('DPK1')">DPK1</button>
+            <button onclick="filterNotes('DPK3')">DPK3</button>
+            <button onclick="filterNotes('Cisco')">Cisco</button>
+        </div>
+
+        <div class="main-layout">
+            <div class="sidebar">
+                <!-- Tombol untuk membuka form tulis postingan -->
+                <button class="compose-btn" onclick="toggleCompose()">[C] Compose</button>
+                <ul class="sidebar-menu">
+                    <li onclick="filterNotes('all')"><span>📁 Inbox</span></li>
+                    <li><span>✉ Sent</span></li>
+                    <li><span>📝 Drafts</span></li>
+                    <li><span>🗑 Trash</span> <span style="color: var(--text-muted);">empty</span></li>
+                </ul>
+            </div>
+
+            <div class="content-area">
+                <div class="content-header">
+                    <span>nanra</span>
+                    <span id="status-info">showing latest entries</span>
+                </div>
+
+                <!-- FORM COMPOSE (Tersembunyi secara default, muncul saat tombol [C] Compose diklik) -->
+                <div id="compose-form">
+                    <h3>&gt; New_Terminal_Post.sh</h3>
+                    <div class="form-group">
+                        <label>Judul Catatan / Tugas:</label>
+                        <input type="text" id="post-title" placeholder="Contoh: Konfigurasi VLAN pada Cisco Packet Tracer...">
+                    </div>
+                    <div class="form-group">
+                        <label>Kategori (ASJ / DPK1 / DPK3 / Cisco):</label>
+                        <select id="post-category">
+                            <option value="ASJ">ASJ</option>
+                            <option value="DPK1">DPK1</option>
+                            <option value="DPK3">DPK3</option>
+                            <option value="Cisco">Cisco</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Isi Ringkas / Snippet:</label>
+                        <textarea id="post-content" placeholder="Tulis ringkasan catatan atau laporan LKPD di sini..."></textarea>
+                    </div>
+                    <button class="btn-submit" onclick="publishPost()">[ Publish Post ]</button>
+                </div>
+
+                <!-- Daftar Catatan / Tugas -->
+                <div id="notes-container">
+                    
+                    <!-- Catatan 1 (ASJ) -->
+                    <div class="note-card" data-category="ASJ">
+                        <span class="note-title">Konfigurasi Subnetting IPv4 & Routing Dasar</span>
+                        <div class="note-snippet">
+                            Catatan ringkas mengenai cara menghitung CIDR dan subnet mask untuk keperluan praktikum jaringan komputer...
+                        </div>
+                        <div class="note-footer">
+                            <span class="tag">ASJ</span>
+                            <div class="date-read">
+                                <span>12 Sep 2026</span>
+                                <a href="#" style="color:var(--text-color); text-decoration:none;">[read note →]</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Catatan 2 (DPK1) -->
+                    <div class="note-card" data-category="DPK1">
+                        <span class="note-title">Pengenalan Python Scripting untuk Automation Sederhana</span>
+                        <div class="note-snippet">
+                            Mempelajari fungsi dasar input-output serta logika percabangan menggunakan Python untuk tugas harian...
+                        </div>
+                        <div class="note-footer">
+                            <span class="tag">DPK1</span>
+                            <div class="date-read">
+                                <span>10 Sep 2026</span>
+                                <a href="#" style="color:var(--text-color); text-decoration:none;">[read note →]</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk menampilkan/menyembunyikan form compose
+        function toggleCompose() {
+            const form = document.getElementById('compose-form');
+            if (form.style.display === 'block') {
+                form.style.display = 'none';
+            } else {
+                form.style.display = 'block';
+            }
+        }
+
+        // Fungsi untuk mempublikasikan postingan baru ke halaman
+        function publishPost() {
+            const title = document.getElementById('post-title').value;
+            const category = document.getElementById('post-category').value;
+            const content = document.getElementById('post-content').value;
+
+            if (!title || !content) {
+                alert("Judul dan isi catatan tidak boleh kosong!");
+                return;
+            }
+
+            // Ambil tanggal hari ini secara otomatis
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
+            const currentDate = new Date().toLocaleDateString('en-GB', options);
+
+            // Buat elemen card baru secara dinamis
+            const container = document.getElementById('notes-container');
+            const newCard = document.createElement('div');
+            newCard.className = 'note-card';
+            newCard.setAttribute('data-category', category);
+
+            newCard.innerHTML = `
+                <span class="note-title">${title}</span>
+                <div class="note-snippet">${content}</div>
+                <div class="note-footer">
+                    <span class="tag">${category}</span>
+                    <div class="date-read">
+                        <span>${currentDate}</span>
+                        <a href="#" style="color:var(--text-color); text-decoration:none;">[read note →]</a>
+                    </div>
+                </div>
+            `;
+
+            // Masukkan ke urutan paling atas daftar catatan
+            container.prepend(newCard);
+
+            // Reset form dan tutup
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-content').value = '';
+            document.getElementById('compose-form').style.display = 'none';
+
+            alert("Catatan baru berhasil diterbitkan!");
+        }
+
+        // Fungsi Filter Kategori
+        function filterNotes(category) {
+            const cards = document.querySelectorAll('.note-card');
+            const buttons = document.querySelectorAll('.filter-bar button');
+            
+            buttons.forEach(btn => btn.classList.remove('active-filter'));
+            event.target.classList.add('active-filter');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('status-info').innerText = category === 'all' ? 'showing latest entries' : 'filtered by: ' + category;
+        }
+    </script>
+
+</body>
+</html>
