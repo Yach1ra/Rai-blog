@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nanra // notes & terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #1e1e2e;
+            --panel-color: #181825;
+            --text-color: #cdd6f4;
+            --text-muted: #6c7086;
+            --accent-color: #89b4fa;
+            --tag-bg: #313244;
+            --border-color: #313244;
+            --hover-color: #2b2b40;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            border: 1px solid var(--border-color);
+            background-color: var(--panel-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(0,0,0,0.1);
+        }
+
+        .header-menu span, .theme-options span {
+            margin-right: 15px;
+            color: var(--text-muted);
+        }
+
+        .header-menu .active {
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        .filter-bar {
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 13px;
+            background: rgba(0,0,0,0.05);
+        }
+
+        .filter-bar a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: var(--text-muted);
+        }
+
+        .filter-bar a.active-filter {
+            color: var(--text-color);
+        }
+
+        .filter-bar a:hover {
+            color: var(--accent-color);
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            min-height: 500px;
+        }
+
+        .sidebar {
+            border-right: 1px solid var(--border-color);
+            padding: 15px;
+        }
+
+        .compose-btn {
+            display: block;
+            background: var(--tag-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            text-align: left;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-family: inherit;
+            text-decoration: none;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            padding: 6px 0;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .content-area {
+            padding: 20px;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-size: 12px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .note-card {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: background 0.2s;
+        }
+
+        .note-card:hover {
+            background-color: var(--hover-color);
+        }
+
+        .note-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .note-snippet {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .note-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tag {
+            background-color: #a6e3a1;
+            color: #11111b;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .date-read {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            gap: 15px;
+        }
+
+        .date-read a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .date-read a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="top-header">
+            <div class="header-menu">
+                <span>Theme:</span>
+                <span class="active">Catppuccin</span>
+            </div>
+            <div class="theme-options">
+                <span>session: catppuccin / alt</span>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <span style="color: var(--text-muted); margin-right: 10px;">Examples:</span>
+            <a href="#" class="active-filter">All Notes</a>
+            <a href="#">ASJ</a>
+            <a href="#">DPK1</a>
+            <a href="#">DPK3</a>
+            <a href="#">Cisco</a>
+        </div>
+
+        <div class="main-layout">
+            <div class="sidebar">
+                <a href="#" class="compose-btn">[C] Compose</a>
+                <ul class="sidebar-menu">
+                    <li><span>📁 Inbox</span> <span></span></li>
+                    <li><span>✉ Sent</span> <span></span></li>
+                    <li><span>📝 Drafts</span> <span></span></li>
+                    <li><span>🗑 Trash</span> <span style="color: var(--text-muted);">empty</span></li>
+                </ul>
+            </div>
+
+            <div class="content-area">
+                <div class="content-header">
+                    <span>nanra</span>
+                    <span>showing latest entries</span>
+                </div>
+
+                <!-- Contoh Postingan 1 -->
+                <div class="note-card">
+                    <a href="#" class="note-title">Konfigurasi Subnetting IPv4 & Routing Dasar</a>
+                    <div class="note-snippet">
+                        Catatan ringkas mengenai cara menghitung CIDR dan subnet mask untuk keperluan praktikum jaringan komputer...
+                    </div>
+                    <div class="note-footer">
+                        <span class="tag">ASJ</span>
+                        <div class="date-read">
+                            <span>12 Sep 2026</span>
+                            <a href="#">[read note →]</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contoh Postingan 2 -->
+                <div class="note-card">
+                    <a href="#" class="note-title">Pengenalan Python Scripting untuk Automation Sederhana</a>
+                    <div class="note-snippet">
+                        Mempelajari fungsi dasar input-output serta logika percabangan menggunakan Python untuk tugas harian...
+                    </div>
+                    <div class="note-footer">
+                        <span class="tag">DPK1</span>
+                        <div class="date-read">
+                            <span>10 Sep 2026</span>
+                            <a href="#">[read note →]</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
